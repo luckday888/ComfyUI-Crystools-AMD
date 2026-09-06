@@ -40,13 +40,17 @@ You can configure the refresh rate which resources to show:
 ![Monitors](./docs/monitor-settings.png)
 
 > **Notes:**
-> - The GPU data is only available when you use CUDA (only NVIDIA cards, sorry AMD users).
+> - The GPU data is available for **NVIDIA (CUDA)**, **AMD (ROCm, Linux)** and **Jetson** devices.
+>   - NVIDIA: utilization, VRAM and temperature via `pynvml`.
+>   - AMD (ROCm): utilization, VRAM and temperature via the official [`amd-smi`](https://pypi.org/project/amd-smi/) library, or [`pyamdgpuinfo`](https://pypi.org/project/pyamdgpuinfo/) as a fallback. If neither is installed, VRAM is still reported through torch.
 > - This extension needs ComfyUI 1915 (or higher).
 > - The cost of the monitor is low (0.1 to 0.5% of utilization), you can disable it from settings (`Refres rate` to `0`).
 > - Data comes from these libraries:
 >   - [psutil](https://pypi.org/project/psutil/)
 >   - [torch](https://pytorch.org/)
 >   - [pynvml](https://pypi.org/project/pynvml/) (official NVIDIA library)
+>   - [amd-smi](https://pypi.org/project/amd-smi/) (official AMD library, Linux)
+>   - [pyamdgpuinfo](https://pypi.org/project/pyamdgpuinfo/) (AMD sysfs fallback, Linux)
 
 
 ### Progress bar

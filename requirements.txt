@@ -3,6 +3,9 @@ torch
 numpy
 Pillow
 pynvml; platform_machine != 'aarch64'
+# AMD GPU(ROCm) 监控库，仅 Linux；均为可选，导入失败会自动降级
+amd-smi; sys_platform == 'linux'
+pyamdgpuinfo; sys_platform == 'linux'
 py-cpuinfo
 piexif
 jetson-stats; platform_machine == 'aarch64'

@@ -1,13 +1,24 @@
 [project]
 name = "ComfyUI-Crystools"
-description = "With this suit, you can see the resources monitor, progress bar & time elapsed, metadata and compare between two images, compare between two JSONs, show any value to console/display, pipes, and more!\nThis provides better nodes to load/save images, previews, etc, and see \"hidden\" data without loading a new workflow."
+description = "With this suit, you can see the resources monitor, progress bar & time elapsed, metadata and compare between two images, compare between two JSONs, show any value to console/display, pipes, and more!\nThis provides better nodes to load/save images, previews, etc, and see \"hidden\" data without loading a new workflow.\nSupports NVIDIA (CUDA), AMD (ROCm) and Jetson GPUs for the resource monitor."
 version = "1.27.4"
 license = { file = "LICENSE" }
-dependencies = ["deepdiff", "torch", "numpy", "Pillow", "pynvml", "py-cpuinfo"]
+dependencies = [
+  "deepdiff",
+  "torch",
+  "numpy",
+  "Pillow",
+  "pynvml; platform_machine != 'aarch64'",
+  "amd-smi; sys_platform == 'linux'",
+  "pyamdgpuinfo; sys_platform == 'linux'",
+  "py-cpuinfo",
+  "jetson-stats; platform_machine == 'aarch64'",
+]
 
 classifiers = [
   "Operating System :: OS Independent",
   "Environment :: GPU :: NVIDIA CUDA",
+  "Environment :: GPU",
 ]
 
 [project.urls]

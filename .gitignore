@@ -154,3 +154,5 @@ cython_debug/
 .idea
 /node_modules
 /node.zip
+
+.DS_Store
