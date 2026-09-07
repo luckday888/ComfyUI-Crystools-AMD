@@ -156,3 +156,5 @@ cython_debug/
 /node.zip
 
 .DS_Store
+.vscode/
+.claude/
