@@ -207,6 +207,20 @@ class CGPUInfo:
         except Exception as e:
             logger.error('AMD torch fallback check failed. ' + str(e))
 
+    @staticmethod
+    def _amdMetricToInt(value):
+        """
+        将 amdsmi metrics 字典中的指标值安全转为 int。
+        不同版本/平台的 amdsmi 字段类型不固定（可能为 int、float 或字符串，如 "45.0"），
+        直接拿字符串与 int 比较会抛 TypeError。None 或无法转换时返回 None。
+        """
+        if value is None:
+            return None
+        try:
+            return int(round(float(value)))
+        except (TypeError, ValueError):
+            return None
+
     def _amdTorchName(self, deviceIndex):
         """ROCm 下通过 torch 获取显卡名（作为 AMD 各后端的兜底）"""
         try:
@@ -408,7 +422,7 @@ class CGPUInfo:
         elif self.amdsmiLoaded:
             try:
                 metrics = self.amdsmi.amdsmi_get_gpu_metrics_info(deviceHandle)
-                util = metrics.get('average_gfx_activity')
+                util = self._amdMetricToInt(metrics.get('average_gfx_activity'))
                 # 无效值（None 或越界）返回 -1（不可用哨兵）
                 if util is None or util > 100:
                     return -1
@@ -478,10 +492,10 @@ class CGPUInfo:
         elif self.amdsmiLoaded:
             try:
                 metrics = self.amdsmi.amdsmi_get_gpu_metrics_info(deviceHandle)
-                temp = metrics.get('temperature_edge')
+                temp = self._amdMetricToInt(metrics.get('temperature_edge'))
                 # 边缘温度无效时回退到热点温度
                 if temp is None or temp > 200:
-                    temp = metrics.get('temperature_hotspot')
+                    temp = self._amdMetricToInt(metrics.get('temperature_hotspot'))
                 if temp is None or temp > 200:
                     return -1
                 return temp
